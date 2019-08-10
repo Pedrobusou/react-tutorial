@@ -4,35 +4,46 @@ import './index.css';
 
 class Square extends React.Component {
     /**
-     * on a React.component constructor, first line must always be: super(props);
-     * @param {*} props 
-     */
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: null,
-        };
-    }
-
-    /**
-     * calling setState will cause the component and its childs to re-render in order to show the new state
+     * Using props given by parent component Board
      */
     render() {
         return (
-            <button className="square" onClick={() => this.setState({ value: 'x' })} >
-                {this.state.value}
+            <button className="square" onClick={() => this.props.onClick()} >
+                {this.props.value}
             </button>
         );
     }
 }
 
 class Board extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            /**
+             * Array(9). Will store x, o or null
+             */
+            squares: Array(9).fill(null),
+        };
+    }
+
+    handleClick(i) {
+        const squares = this.state.squares.slice(); //Slice to return a new instance to prevent mutation of the original
+        squares[i] = 'X';
+        this.setState({ squares: squares });
+    }
+
     /**
-     * Passing props to the Square instantiation
+     * Instantiate Squares passing props
      * @param {*} i 
      */
     renderSquare(i) {
-        return <Square value={i} />;
+        return (
+            <Square
+                value={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}
+            />
+        );
     }
 
     render() {
