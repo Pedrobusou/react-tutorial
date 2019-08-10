@@ -3,16 +3,34 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
+    /**
+     * on a React.component constructor, first line must always be: super(props);
+     * @param {*} props 
+     */
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: null,
+        };
+    }
+
+    /**
+     * calling setState will cause the component and its childs to re-render in order to show the new state
+     */
     render() {
         return (
-            <button className="square" onClick={() => console.log(`Square ${this.props.value} clicked!`)}>
-                {this.props.value}
+            <button className="square" onClick={() => this.setState({ value: 'x' })} >
+                {this.state.value}
             </button>
         );
     }
 }
 
 class Board extends React.Component {
+    /**
+     * Passing props to the Square instantiation
+     * @param {*} i 
+     */
     renderSquare(i) {
         return <Square value={i} />;
     }
