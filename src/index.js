@@ -2,17 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+/**
+ * Square is no longer a React component
+ * It will not have status nor (true react)props
+ * @param {*} props 
+ */
+function Square(props) {
     /**
      * Using props given by parent component Board
      */
-    render() {
-        return (
-            <button className="square" onClick={() => this.props.onClick()} >
-                {this.props.value}
-            </button>
-        );
-    }
+    return (
+        <button className="square" onClick={props.onClick} >
+            {props.value}
+        </button>
+    );
 }
 
 class Board extends React.Component {
