@@ -8,11 +8,13 @@ import './index.css';
  * @param {*} props 
  */
 function Square(props) {
+    let classes = props.isActive ? "square active" : "square";
+
     /**
      * Using props given by parent component Board
      */
     return (
-        <button className="square" onClick={props.onClick} >
+        <button className={classes} onClick={props.onClick} >
             {props.value}
         </button>
     );
@@ -26,6 +28,7 @@ class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                isActive={i === this.props.activeSquare}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
             />
@@ -73,18 +76,15 @@ class Game extends React.Component {
         const current = history[history.length - 1];
         const squares = current.squares.slice();
 
-        if (calculateWinner(squares) || squares[i]) {
-            return;
-        }
+        if (calculateWinner(squares) || squares[i]) return;
 
         const currentPlayer = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = currentPlayer;
 
         let y;
         if (i <= 8) y = 3;
         if (i <= 5) y = 2;
         if (i <= 2) y = 1;
-
-        squares[i] = currentPlayer;
 
         this.setState({
             history: history.concat([{
@@ -93,7 +93,8 @@ class Game extends React.Component {
                 move: {
                     x: i % 3 + 1,
                     y: y
-                }
+                },
+                activeSquare: i
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -132,6 +133,7 @@ class Game extends React.Component {
             <div className="game">
                 <div className="game-board">
                     <Board
+                        activeSquare={current.activeSquare}
                         squares={current.squares}
                         onClick={i => this.handleClick(i)}
                     />
