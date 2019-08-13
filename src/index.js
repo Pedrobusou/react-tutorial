@@ -36,8 +36,8 @@ class Board extends React.Component {
 
     /**This way makes the field size modification easier */
     renderBoard() {
-        let xLength = 3;
-        let yLength = 3;
+        let xLength = this.props.xLength;
+        let yLength = this.props.yLength;
         let squareNum = 0;
         let boardRows = [];
         let row = [];
@@ -151,6 +151,8 @@ class Game extends React.Component {
             <div className="game">
                 <div className="game-board">
                     <Board
+                        xLength={this.props.boardXLength}
+                        yLength={this.props.boardYLength}
                         activeSquare={current.activeSquare}
                         squares={current.squares}
                         onClick={i => this.handleClick(i)}
@@ -165,7 +167,7 @@ class Game extends React.Component {
     }
 }
 
-ReactDOM.render(<Game />, document.getElementById('root'));
+ReactDOM.render(<Game boardXLength={3} boardYLength={3} />, document.getElementById('root'));
 
 /**@param {Array} squares Array(9) representing the board. Will store x, o or null*/
 function calculateWinner(squares) {
