@@ -28,6 +28,7 @@ class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                key={"square" + i}
                 isActive={i === this.props.activeSquare}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
@@ -36,25 +37,35 @@ class Board extends React.Component {
     }
 
     render() {
-        return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
+        let squareNum = 0;
+        let boardRows = [];
+        let row = [];
+
+        for (let i = 0; i < 3; i++) {
+            row = [];
+            for (let j = 0; j < 3; j++) {
+                row.push(this.renderSquare(squareNum));
+                squareNum++;
+            }
+            boardRows.push(row);
+        }
+
+        return <div>{boardRows.map(row => <div key={"board" + boardRows.indexOf(row)} className="board-row">{row}</div>)}</div>
+
+        /*
+        //Other way, hardcoding the field structure:
+        const row = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+
+        const boardRows = row.map((squares, i) => {
+            return (
+                <div key={"board" + i} className="board-row">
+                    {squares.map(squareNum => this.renderSquare(squareNum))}
                 </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );
+            )
+        });
+        
+        return <div>{boardRows}</div>
+       */
     }
 }
 
