@@ -10,9 +10,7 @@ import './index.css';
 function Square(props) {
     let classes = props.isActive ? "square active" : "square";
 
-    /**
-     * Using props given by parent component Board
-     */
+    /**Using props given by parent component Board*/
     return (
         <button className={classes} onClick={props.onClick} >
             {props.value}
@@ -36,36 +34,46 @@ class Board extends React.Component {
         );
     }
 
-    render() {
+    /**This way makes the field size modification easier */
+    renderBoard() {
+        let xLength = 3;
+        let yLength = 3;
         let squareNum = 0;
         let boardRows = [];
         let row = [];
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < yLength; i++) {
             row = [];
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < xLength; j++) {
                 row.push(this.renderSquare(squareNum));
                 squareNum++;
             }
             boardRows.push(row);
         }
 
-        return <div>{boardRows.map(row => <div key={"board" + boardRows.indexOf(row)} className="board-row">{row}</div>)}</div>
+        return <div>{boardRows.map(row => <div key={"board" + boardRows.indexOf(row)} className="board-row">{row}</div>)}</div>;
+    }
 
-        /*
-        //Other way, hardcoding the field structure:
-        const row = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+    /**
+     * Other way for rendering the board, hardcoding the field structure
+     * Field size can also be modified by direcly editing boardStructure
+    */
+    renderBoard2() {
+        const boardStructure = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
 
-        const boardRows = row.map((squares, i) => {
+        const boardRows = boardStructure.map((squares, i) => {
             return (
                 <div key={"board" + i} className="board-row">
                     {squares.map(squareNum => this.renderSquare(squareNum))}
                 </div>
             )
         });
-        
+
         return <div>{boardRows}</div>
-       */
+    }
+
+    render() {
+        return this.renderBoard();
     }
 }
 
@@ -123,7 +131,6 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
-
         const moves = history.map((val, i) => {
             const desc = i ? `Go to move #${i} ${val.player} [${val.move.x},${val.move.y}]` : 'Go to game start';
             return (
@@ -158,20 +165,11 @@ class Game extends React.Component {
     }
 }
 
-// ========================================
+ReactDOM.render(<Game />, document.getElementById('root'));
 
-ReactDOM.render(
-    <Game />,
-    document.getElementById('root')
-);
-
-/**
- * @param {Array} squares Array(9) representing the board. Will store x, o or null
- */
+/**@param {Array} squares Array(9) representing the board. Will store x, o or null*/
 function calculateWinner(squares) {
-    /**
-     * All the possible win positions: 3 lines horizontal, 3 lines vertical, 2 diagonals
-     */
+    /**All the possible win positions: 3 lines horizontal, 3 lines vertical, 2 diagonals*/
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -182,6 +180,7 @@ function calculateWinner(squares) {
         [0, 4, 8],
         [2, 4, 6],
     ];
+
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
 
@@ -190,5 +189,6 @@ function calculateWinner(squares) {
             return squares[a]; //will return X or O as the winner
         }
     }
+
     return null;
 }
